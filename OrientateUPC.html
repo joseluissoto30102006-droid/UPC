@@ -207,7 +207,7 @@ const TAGS=[
 [/^Computadoras reservables/,'Computadoras'],[/^Cubículos/,'Cubículos'],[/^Baños/,'Baños'],[/^Cafetería/,'Cafetería'],
 [/^Baño hombres$/,'Baño hombres'],[/^Baño mujeres$/,'Baño mujeres'],[/^Aula A4[123]$/,null],
 [/^Esc\. emergencia [123]$/,null],[/^Ascensor$/,'Ascensor'],[/^5 ascensores$/,'Ascensores'],
-[/^Comedor$/,'Comedor'],[/^Cajero$/,'Cajero'],[/^Cocina$/,'Cocina'],[/^Mesas largas/,'Mesas'],[/^Microondas/,'Microondas'],[/^Tienda/,'Caja'],
+[/^Comedor$/,'Comedor'],[/^Cajero$/,'Cajero'],[/^Cocina$/,'Cocina'],[/^Taller de manualidades$/,'Taller de manualidades'],[/^Entrada Torre B/,'Entrada Torre B'],[/^Estacionamiento$/,'Estacionamiento'],[/^Rampa de estacionamiento$/,'Rampa de estacionamiento'],[/^Cabina de seguridad$/,'Cabina de seguridad'],[/^Mesas largas/,'Mesas'],[/^Microondas/,'Microondas'],[/^Tienda/,'Caja'],
 [/^Acceso restringido a laboratorios$/,'Laboratorios'],[/^Laboratorios/,'Laboratorios'],[/^Aulas y labs$/,'Aulas y labs'],
 [/^Ingreso \(punto 5\)$/,'Ingreso'],[/^Salida 2 \(TIU\)$/,'Entrada 2'],[/^[BC][2-8]1\d$/,null]];
 const tagName=t=>{for(const r of TAGS)if(r[0].test(t))return r[1]===null?t:r[1];return null};
@@ -215,9 +215,9 @@ function tag(g,txt,x,y,z,sc){txt=tagName(txt);if(txt==null)return;sc=sc||.7;let 
 const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:false}));s.scale.set(5*sc,1.25*sc,1);s.position.set(x,y,z);s.renderOrder=9;s.userData.tag=1;g.add(s)}
 function room(g,x0,z0,x1,z1,col,lb,h,o){h=h||1.2;const m=bx(Math.abs(x1-x0),h,Math.abs(z1-z0),0,(x0+x1)/2,.2+h/2,(z0+z1)/2,g,GL(col,o||.6));if(h>.1)edge(m);if(lb)tag(g,lb,(x0+x1)/2,2.4,(z0+z1)/2);return m}
 /* ---------- Torre B: centro del arco y utilidades ---------- */
-const BX=0,BZ=6,RM=27.75,AE=280,OCT=13.5,bp=(a,r)=>[BX+r*Math.cos(a*D),BZ+r*Math.sin(a*D)],
+const BX=0,BZ=6,RM=27.75,AE=280,OCT=26,bp=(a,r)=>[BX+r*Math.cos(a*D),BZ+r*Math.sin(a*D)],
 /* limites de la torre B: las caras de los extremos son planos (nucleos de escalera oeste y este), no un angulo fijo. BWC/BEC = distancia del plano al eje del nucleo (con un pequeno margen) */
-BWV=[-Math.sin(167*D),Math.cos(167*D)],BEV=[-Math.sin((AE-OCT/2)*D),Math.cos((AE-OCT/2)*D)],BWC=2.72,BEC=3.3;
+BWV=[-Math.sin(167*D),Math.cos(167*D)],BEV=[-Math.sin(257*D),Math.cos(257*D)],BWC=2.72,BEC=1.05;
 function secShape(a0,a1,r0,r1){const s=new THREE.Shape();if(a0>=165&&a1<=276){s.absarc(0,0,r1,-a1*D,-a0*D,false);s.absarc(0,0,r0,-a0*D,-a1*D,true);return s}
 const n=Math.max(8,Math.ceil((a1-a0)/1.2));let P=[];for(let i=0;i<=n;i++){const a=(a0+(a1-a0)*i/n)*D;P.push([r1*Math.cos(a),r1*Math.sin(a)])}for(let i=n;i>=0;i--){const a=(a0+(a1-a0)*i/n)*D;P.push([r0*Math.cos(a),r0*Math.sin(a)])}
 const cl=(Q,v,k,c)=>{const o=[];for(let i=0;i<Q.length;i++){const p=Q[i],q=Q[(i+1)%Q.length],gp=k*(p[0]*v[0]+p[1]*v[1])-c,gq=k*(q[0]*v[0]+q[1]*v[1])-c;if(gp<=0)o.push(p);if((gp<0&&gq>0)||(gp>0&&gq<0)){const t=gp/(gp-gq);o.push([p[0]+(q[0]-p[0])*t,p[1]+(q[1]-p[1])*t])}}return o};
@@ -454,7 +454,7 @@ const wtex=cv(128,64,(c,w,h)=>{c.fillStyle='#d2d0cb';c.fillRect(0,0,w,h);c.fillS
 function muro(x0,z0,x1,z1){const L=Math.hypot(x1-x0,z1-z0),t=wtex.clone();t.needsUpdate=true;t.repeat.set(L/3,1);const r=-Math.atan2(z1-z0,x1-x0),cx=(x0+x1)/2,cz=(z0+z1)/2;bx(L,1.8,.3,0,cx,1.15,cz,0,new THREE.MeshLambertMaterial({map:t})).rotation.y=r;0}
 const wz=x=>20.5+Math.sin(x/7);
 for(let x=-33;x<22.9;x+=.8){const xe=Math.min(23,x+.8);muro(x,wz(x),xe,wz(xe))}
-muro(34,3.7,34,-50);muro(34,3.7,32,5.7);muro(34,-50,9.3,-50);muro(5.7,-50,-33,-50);muro(-33,-50,-33,wz(-33));
+muro(34,3.7,34,-50);muro(34,3.7,32,5.7);muro(34,-50,9.3,-50);muro(5.7,-50,-10.6,-50);muro(-16,-50,-33,-50);muro(-33,-50,-33,wz(-33));
 /* asientos de cemento con madera y area verde encima: desde el inicio de la torre B, el area verde va bajando de ancho en escala */
 {const XS=-27,XE=3,ST=.8,pw=x=>1.9-1.4*Math.min(1,Math.max(0,(x-XS)/(XE-XS)));
 for(let x=XS;x<XE-.01;x+=ST){const xa=x,xb=x+ST,za=wz(xa),zb=wz(xb),dx=xb-xa,dz=zb-za,L=Math.hypot(dx,dz),nx=dz/L,nz=-dx/L,r=-Math.atan2(dz,dx),mx=(xa+xb)/2,mz=(za+zb)/2,w=pw(mx),oP=.25+w/2,oB=.25+w+.15+.3;
@@ -494,7 +494,7 @@ bx(w,1.1,.5,CEM,x,.65,z0+.25,g);bx(w,.62,.3,CEM,x,.41,band,g)};
 
 
 /* setos verdes: oeste, este y norte (no al frente/sur); se acortan en cada esquina para poder cruzar la pista */
-valla(-49,14,-37.2,true);valla(-49,8,38.2,true);valla(-35,3.5,-55.6,false);valla(11.5,32,-55.6,false);flushHedge();
+valla(-49,14,-37.2,true);valla(-49,8,38.2,true);valla(-35,-16.4,-55.6,false);valla(-10.2,3.5,-55.6,false);valla(11.5,32,-55.6,false);flushHedge();
 flushGreen();
 /* ---------- ÁRBOLES DE LA PLAZA ---------- */
 {
@@ -604,7 +604,7 @@ if(i==3){bx(.06,1.2,.06,0x333333,31.6,FH+.9,9.1,f.sh);const lm=new THREE.Mesh(ne
 if(i==2)bx(2.2,2,.25,RED,24.5,2.6,9.85,f.sh);
 if(i==3){bx(2.2,3.6,.25,RED,24.5,1.8,9.85,f.sh);bx(.3,2.6,4,RED,16.5,FH-1.5,7,f.sh).rotation.y=.141;sprite('A',2,'#d6001c','#ffffff',16.2,FH-1.5,7,f.sh)}}
 /* Torre B: aulas al frente, pasillo largo atras con muro blanco, y un nucleo central (ascensor, escalera 2 y banos) que sobresale por detras */
-{const CEMB=M(0xe8e6e0),win=facadeW('#92969b','#dbe5ee'),gm=GL(0x5f9aa6,.3),tm=GL(0xb33a3a,.85),cc=M(0xb4b4b4),HID=new THREE.MeshBasicMaterial({visible:false}),ccO=[cc,cc,cc,cc,HID,cc],wh=M(0xf4f4f2),W=(AE-OCT-172)/10;
+{const CEMB=M(0xe8e6e0),win=facadeW('#92969b','#dbe5ee'),gm=GL(0x5f9aa6,.3),tm=GL(0xb33a3a,.85),cc=M(0xb4b4b4),HID=new THREE.MeshBasicMaterial({visible:false}),ccO=[cc,cc,cc,cc,HID,cc],wh=M(0xf4f4f2),W=(AE-OCT-172)/9;
 const g2=cv(128,128,(c,w,h)=>{c.fillStyle='#2f5a2f';c.fillRect(0,0,w,h);for(let k=0;k<400;k++){c.fillStyle=['#4d8a3a','#7bb04e','#1f4a28'][k%3];c.beginPath();c.arc(Math.random()*w,Math.random()*h,3+Math.random()*4,0,7);c.fill()}}),gr=new THREE.MeshLambertMaterial({map:g2});
 const GW=cv(192,1344,(c,w,h)=>{c.fillStyle='#1b371d';c.fillRect(0,0,w,h);const P1=['#10270f','#204a24','#2b5e2a','#173a1b'],P2=['#5a9a38','#6fb044','#86c456','#4d8a32','#9ad36a'],ph=1.3;
 for(let k=0;k<5200;k++){const x=hash(k*5+1)*w,y=hash(k*5+2)*h,s=2+hash(k*5+3)*4.5;c.fillStyle=P1[k%4];c.beginPath();c.ellipse(x,y,s*1.5,s,hash(k*5+4)*6.28,0,7);c.fill()}
@@ -615,7 +615,7 @@ for(let i=0;i<8;i++){const f=mk('B',i);const seg=(a,len,dep,mat,r)=>{const [x,z]
 if(a>240){const t0=px*BEV[0]+pz*BEV[1],k1=va[0]*BEV[0]+va[1]*BEV[1],k2=Math.abs(ua[0]*BEV[0]+ua[1]*BEV[1]);hi=Math.min(hi,(BEC-t0-k2*dep/2)/k1)}
 if(a<200){const t0=px*BWV[0]+pz*BWV[1],k1=va[0]*BWV[0]+va[1]*BWV[1],k2=Math.abs(ua[0]*BWV[0]+ua[1]*BWV[1]);lo=Math.max(lo,(-BWC-t0+k2*dep/2)/k1)}
 if(hi-lo<.1)return;const sh=(lo+hi)/2;x+=va[0]*sh;z+=va[1]*sh;const m=bx(hi-lo,h,dep,c,x,y,z,f.sh);m.rotation.y=-(a+90)*D};
-if(i==0){for(let k=1;k<8;k++)seg(AE-(k+.5)*OCT,RM*OCT*D+.1,6.5,k<=5?gm:cc);
+if(i==0){for(let k=1;k<7;k++)seg(AE-OCT-(k-.5)*13.5,6.54,6.5,k<=4?gm:cc);
 /* nucleo este: escalera y pasillito en concreto. Cajero (t 1.2 a 3.32, u 24.5 a 28): pared sólida en el extremo, y al frente (plaza) pilares de concreto, una ventana de vidrio y una puerta transparente con marco */
 {const X=new THREE.Group();X.position.set(BX,0,BZ);X.rotation.y=-((AE-OCT/2)+90)*D;f.sh.add(X);const Z=u=>-u,gl=GL(0x9fd0e0,.28),fr=0x2b2e33;
 bx(4.52,FH,6.5,0,-1.06,FH/2,-27.75,X,cc);bx(2.12,FH,3,0,2.26,FH/2,-29.5,X,cc);
@@ -650,8 +650,8 @@ vm(25.6,true);vm(26.9,false)}
 for(let j=0;j<3;j++)seg(228.9+(j+.5)*6.2,32.75*6.2*D+.1,3.5,ccO,32.75);
  slabArc(f.sh,158,266.5,22.8,24.5,0xc7c6c1,FH-.1,.4);
  slabArc(f.sh,228.9,247.5,31,34.5,0xf4f4f2,FH,.25);}
-else{for(let k=0;k<10;k++)seg(AE-OCT-(k+.5)*W,26.5*W*D+.1,4,win,26.5);{const gm0=GRW(i);seg(AE-OCT/2,6.7,7.2,[CEMB,CEMB,CEMB,CEMB,gm0,CEMB])};
- for(let a=164;a<280;a+=6){pc(a,29.75,3.35,.2,2.5,.1,0xd4d4d4);if(a<201||a>232)pc(a,30.9,3.35,1.1,.25,.75,0xffffff)}{const [ox,oz]=bp(280.15,29.7);const om=bx(.3,2.4,2.2,0x222222,ox,1.3,oz,f.sh);om.rotation.y=-(280.15+90)*D}}
+else{for(let k=0;k<9;k++)seg(AE-OCT-(k+.5)*W,26.5*W*D+.1,4,win,26.5);{const gm0=GRW(i);seg(AE-OCT/2,6.7,7.2,[CEMB,CEMB,CEMB,CEMB,gm0,CEMB])};
+ for(let a=164;a<254;a+=6){pc(a,29.75,3.35,.2,2.5,.1,0xd4d4d4);if(a<201||a>232)pc(a,30.9,3.35,1.1,.25,.75,0xffffff)}{const [ox,oz]=bp(280.15,29.7);const om=bx(.3,2.4,2.2,0x222222,ox,1.3,oz,f.sh);om.rotation.y=-(280.15+90)*D}}
 for(let j=0;j<4;j++)seg(228.9-(j+.5)*6.25,32.75*6.25*D+.1,3.5,i==0?ccO:cc,32.75);if(i==7){slabArc(f.sh,161,280,24.5,31,0xf4f4f2,FH,.25);slabArc(f.sh,203.9,228.9,31,34.5,0xf4f4f2,FH,.25)}
 /* ventanas circulares: en la cara lateral (extremo oeste) del nucleo, pegadas al muro y mirando hacia afuera, no delante de la fachada */
 if(i>0)[26,29.5].forEach(u=>{const A=167*D,t=-2.75-.02,x=BX+u*Math.cos(A)-t*Math.sin(A),z=BZ+u*Math.sin(A)+t*Math.cos(A);
@@ -689,6 +689,24 @@ if(k<8){const fy=k*FH+.09;rail(5.3,-21.3,12.77,-21.3,fy);if(k>=4)rail(12.2,-25.5
 for(let s=1;s<=7;s++){const yl=s*FH+.09,yh=(s+1)*FH-.31,x0=5.64,x1=12.43;
 L([x0,yl,-21.5],[x1,yh,-21.5],.08,.1);L([x0,yh,-21.5],[x1,yl,-21.5],.08,.1);B(.4,.4,.05,(x0+x1)/2,(yl+yh)/2,-21.5)}
 [[RB,M(RED)],[GB,M(0x5d6065)]].forEach(q=>{const a=q[0];if(!a.length)return;const im=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),q[1],a.length);a.forEach((m,i)=>im.setMatrixAt(i,m));im.instanceMatrix.needsUpdate=true;im.frustumCulled=false;CP.add(im)})}
+{const g=new THREE.Group();CP.add(g);bx(17.6,.24,6.2,0xcdcbc5,4.1,.02,-22.4);
+const pts=[[-10.2,25.45],[-4.4,25.45],[-4.4,22.6],[-10.2,21]],sp=new THREE.Shape();pts.forEach((p,i)=>i?sp.lineTo(p[0],p[1]):sp.moveTo(p[0],p[1]));
+const geo=new THREE.ExtrudeGeometry(sp,{depth:.24,bevelEnabled:false});geo.rotateX(-Math.PI/2);const m=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({color:0xbfbdb8,side:THREE.DoubleSide}));m.position.y=.02;g.add(m);
+const WW=0xe6e4de;bx(.55,3.2,1.25,WW,-4.68,1.7,-24.83);bx(.55,.85,1.6,WW,-4.68,2.775,-23.4);bx(.3,3.2,4.45,WW,-10.35,1.7,-23.23);
+bx(4.71,3.2,.3,WW,-7.3,1.7,-21.8).rotation.y=0.364;bx(1,.12,1.8,RED,-3.95,2.62,-23.4);
+const LET=cv(512,96,(c,w,h)=>{c.fillStyle='#d6001c';c.fillRect(0,0,w,h);c.fillStyle='#fff';c.font='bold 40px sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('TALLER DE MANUALIDADES',w/2,h/2)});
+const lm=new THREE.Mesh(new THREE.PlaneGeometry(3.2,.6),new THREE.MeshBasicMaterial({map:LET}));lm.position.set(-4.34,2.55,-23.4);lm.rotation.y=Math.PI/2;g.add(lm);
+bx(6.1,.25,2,RED,-7.3,3.35,-24.45);bx(2.7,.25,2.5,RED,-8.93,3.35,-22.2);
+mesaLarga(g,-8.7,-24.3,Math.PI/2-.05);mesaLarga(g,-6.2,-24.3,Math.PI/2-.05);mesaLarga(g,-8.7,-22.3,Math.PI/2-.05);mesaLarga(g,-6.2,-22.3,Math.PI/2-.05);
+tag(g,'Taller de manualidades',-3.6,2.7,-23.3,.6);tag(g,'Mesas largas (arquitectura)',-7.3,3,-23.4,.55);tag(g,'Entrada Torre B (E–F)',5.2,2.8,-21.6,.5)}
+{const g=new THREE.Group();CP.add(g);
+bx(9.8,.24,22,0xc9c7c2,-15.5,.02,-37.5);bx(.35,4.3,22.5,0xa9aba9,-15.78,-1.7,-38.2);bx(.35,4.3,22.5,0xa9aba9,-10.72,-1.7,-38.2);
+bx(4.5,.24,21,0x8f9296,-13.25,-1.22,-38.2).rotation.x=0.123;bx(4.5,5,.4,0x23272e,-13.25,-1.5,-27.8);
+bx(.12,.9,.12,0xcfd2d6,-14.9,.59,-48.1);bx(.12,.9,.12,0xcfd2d6,-11.6,.59,-48.1);bx(3.5,.16,.16,RED,-13.25,.98,-48.1);
+bx(2.3,2.45,2.4,0xe8e6e0,-9.4,1.37,-48.6);bx(2.6,.14,2.7,0xd6d3cc,-9.4,2.66,-48.6);
+bx(2,.8,.06,0,-9.4,1.7,-49.82,0,GL(0x9fd0e0,.45));bx(.9,1.95,.06,0x55585d,-8.5,1.12,-47.37);
+sprite('P',1.1,'#f4f4f2','#d6001c',-9.4,3.35,-48.6);
+tag(g,'Estacionamiento',-13,3.4,-46,.65);tag(g,'Rampa de estacionamiento',-13.2,2.8,-37,.55);tag(g,'Cabina de seguridad',-9.4,4.1,-48.6,.4)}
 /* ---------- interiores ---------- */
 const AXW=y=>5*y/35.2,AZ=y=>-25.5+y,AXE=(n,y)=>5*y/35.2;
 function roomPoly(g,pts,col,lb,h,o){h=h||1.2;const sp=new THREE.Shape();pts.forEach((p,i)=>i?sp.lineTo(p[0],-p[1]):sp.moveTo(p[0],-p[1]));const geo=new THREE.ExtrudeGeometry(sp,{depth:h,bevelEnabled:false});geo.rotateX(-Math.PI/2);const m=new THREE.Mesh(geo,GL(col,o||.6));m.position.y=.2;g.add(m);if(h>.1)edge(m);
@@ -765,7 +783,7 @@ onArc(g,198.4,27.75,.3,3.4,6.6,0xbdbdbd,1.9);
 arc(g,173.1,198,24.5,31,0xbdbdbd,'Concreto (zona sólida)');
  arc(g,247.5,280,30.85,31,0xe9e6df,null,3.2,1);arc(g,199,203.9,30.85,31,0xe9e6df,null,3.2,1);arc(g,203.9,216.7,34.4,34.5,0xe9e6df,null,3.2,1);arc(g,228.9,247.5,34.4,34.5,0xe9e6df,null,3.2,1);[203.9,247.5].forEach(a=>onArc(g,a,32.75,.15,3.2,3.5,0xe9e6df,1.8))}
 else{arc(g,161,280,28.5,31,0xd4d4d4,'Pasillo largo (libre)',.07,1);
- for(let k=0;k<10;k++){const a1=266.5-k*9.45,a0=a1-9.45,am=(a0+a1)/2;arc(g,a0,a1,24.5,28.5,k%2?0x8fb4d9:0x7aa7d6,'B'+n+(10+k));const [cx,cz]=bp(am,28.5);classroom(g,cx,cz,-(am+90)*D,4.4,4,1)}
+ for(let k=0;k<9;k++){const a1=257.05-k*9.11,a0=a1-9.11,am=(a0+a1)/2;arc(g,a0,a1,24.5,28.5,k%2?0x8fb4d9:0x7aa7d6,'B'+n+(10+k));const [cx,cz]=bp(am,28.5);classroom(g,cx,cz,-(am+90)*D,4.4,4,1)}
  arc(g,210.3,216.7,31,34.5,0xd8c27a,'Baño hombres');arc(g,203.9,210.3,31,34.5,0xd8c27a,'Baño mujeres');[213.5,207.1].forEach(a=>onArc(g,a,31.03,1,2.1,.08,0x6b7078,1.15));
  arc(g,161,203.9,30.75,31,0xffffff,null,1.1,1);arc(g,228.9,280,30.75,31,0xffffff,null,1.1,1);const wp=bp(250,30.9);tag(g,'Muro blanco de protección',wp[0],2.6,wp[1],.5);{const dp=bp(278,29.7);tag(g,'Paso libre a la estructura roja',dp[0],3.2,dp[1],.45)}}}
 function cInt(f,n){const g=f.inn,XL=-10.5,XR=32,ZB=-47.5,ZF=-25.5,XM=7.5,ZC=-36.5,H1=[-4.5,-39.5,1.5,-33.5],H2=[12.5,-39.5,18.5,-33.5];
@@ -811,6 +829,8 @@ a:{n:'Torre A',c:[-8,8,27],t:[17.5,8,12],d:'Trapecio de 4 pisos alineado con la 
 b:{n:'Torre B',c:[-8,13,19],t:[-8,13.5,-20],d:'8 pisos en arco: comedor en el primero y 10 salones de computadoras por piso arriba, con ventanas al frente y una cubierta blanca entre el piso 1 y el 2. Abre Explora → Torres para recorrerla piso por piso.'},
 com:{n:'Comedor',c:[-4,3,0],t:[-15.5,2.5,-17],d:'Primer piso de la Torre B: vitrinas al frente, mesas largas, columnas rojas, recepción y caja, cocina, microondas y tienda al final.'},
 vr:{n:'Estructura roja',c:[0,6,-8],t:[7,14,-24],d:'Se levanta sobre el pasillo principal, que pasa libre por debajo. Toca el extremo de la Torre B, se une al frente de C (punto 5) y a la Torre A hasta el piso 4.'},
+tal:{n:'Taller de manualidades',c:[4,7,-10],t:[-7,1.5,-23],d:'Espacio libre del primer piso, pegado a la cara sur de la Torre C y al extremo perfilado de la Torre B. Entrada abierta al pasillo principal con el letrero "Taller de manualidades", techo rojo en L y mesas de trabajo para arquitectura.'},
+est:{n:'Estacionamiento',c:[-28,8,-26],t:[-13,-1,-42],d:'Ingreso por el norte (junto a la cabina de seguridad) y rampa que baja al sótano a lo largo del lado oeste de la Torre C.'},
 c:{n:'Torre C',c:[50,32,8],t:[22,13,-30],d:'Detrás de todo, con su eje de este a oeste. El pasillo principal entra por el punto 5 y sale por el 2 (TIU). Elige "C" en el corte por piso.'}};
 let fly=null,tw='C',curF={A:0,B:0,C:0},busy=false,cutT=null;
 function flyTo(c,t,d,cb,arc){fly={t:0,d:d||1.9,cb:cb,arc:arc,p0:cam.position.clone(),t0:ctl.target.clone(),p1:new THREE.Vector3(...c),t1:new THREE.Vector3(...t)}}
@@ -820,7 +840,7 @@ const INFO={A:['Planta A1-B1-C-D con la zona de visitantes (Q7-R6-C-D) separada 
 B:['Comedor: mesas largas, columnas rojas, recepción y caja a la derecha del ascensor, cocina detrás. La recepción, caja y cocina están al costado del ascensor, con la puerta de cortina transparente a la derecha de la cocina. Frente al ascensor solo hay mesas largas, dispuestas de norte a sur. Junto a la escalera 2 están los microondas y las mesas blancas. La tienda es un espacio pequeño pegado a la pared de concreto, al final, con mostrador de panadería, snacks, refri roja con vitrina y mesa de cafetera. La escalera de emergencia 1 tiene su puerta verde en el extremo este, bajo la estructura roja, y la 3 en la fachada, bajo la cubierta. Cajero junto a la escalera 1.'],
 C:['Planta baja: el pasillo principal entra por el punto 5 y termina en el 2, salida con TIU. Laboratorios en la zona 1-2-5-6 y descanso en 2-3-4-5.','Dos huecos con barandales rojos, por los que se ven los pisos de abajo: el 1 detrás de los ascensores y el 2 con la escalera roja en U que va de cada punto Ai al Bi+1. La zona 1-2-5-6 es laboratorio. El punto 5 conecta con la estructura roja.','Baño de hombres en el punto 1 y de mujeres en el 6, con un salón en medio sobre el costado izquierdo. 5 salones de 1 a 3, 2 de 4 a 5 y 2 de 5 a 6. Los pasillos rodean los huecos. Cada salón tiene fachada con puerta y ventana, pizarra, mesa del profesor y carpetas con sillas.']};
 function info(t,n){if(t=='B'&&n>1)return 'Diez salones de computadoras al frente, con ventanas hacia la plaza, cada uno con su fachada, pizarra, mesa del profesor y puestos con monitor. Las escaleras de emergencia 1 y 3 están en las torres de los extremos, al lado de las aulas. En el centro sobresale el núcleo con el ascensor, la escalera 2 y los baños de hombres y mujeres. El pasillo largo queda libre, con un muro blanco que protege a los estudiantes.';const a=INFO[t];return a[Math.min(n-1,t=='C'?(n>=3?2:n-1):a.length-1)]}
-const VIS=['gen','ent','ent2','rot','com','a','b','c'],exEl=$('ex'),closeEx=()=>{if(innerWidth<720)exEl.classList.add('shut')};
+const VIS=['gen','ent','ent2','rot','com','a','b','c','tal','est'],exEl=$('ex'),closeEx=()=>{if(innerWidth<720)exEl.classList.add('shut')};
 $('exh').onclick=()=>{exEl.classList.toggle('shut');exEl.classList.remove('hint')};
 document.querySelectorAll('#ex .sh').forEach(h=>h.onclick=()=>{const p=h.parentElement,o=p.classList.contains('open');document.querySelectorAll('#ex .st').forEach(x=>x.classList.remove('open'));if(!o)p.classList.add('open')});
 function toView(k){view(null,0);curF={A:0,B:0,C:0};cutT=null;mark();go(k);closeEx()}
